@@ -19,11 +19,30 @@ class Renderer {
             slide0: [
                 // example model (diamond) -> should be replaced with actual model
                 {
-                    vertices: [
+                    /* vertices: [
                         CG.Vector3(400, 150, 1),
                         CG.Vector3(500, 300, 1),
                         CG.Vector3(400, 450, 1),
                         CG.Vector3(300, 300, 1)
+                    ], */
+                    vertices: [
+                        CG.Vector3(130, 110, 1),
+                        CG.Vector3(128.5, 117.7, 1),
+                        CG.Vector3(124.1, 124.1, 1),
+                        CG.Vector3(117.7, 128.5, 1),
+                        CG.Vector3(110, 130, 1),
+                        CG.Vector3(102.3, 128.5, 1),
+                        CG.Vector3(95.9, 124.1, 1),
+                        CG.Vector3(91.5, 117.7, 1),
+                        CG.Vector3(90, 110, 1),
+                        CG.Vector3(91.5, 102.3, 1),
+                        CG.Vector3(95.9, 95.9, 1),
+                        CG.Vector3(102.3, 91.5, 1),
+                        CG.Vector3(110, 90, 1),
+                        CG.Vector3(117.7, 91.5, 1),
+                        CG.Vector3(124.1, 95.9, 1),
+                        CG.Vector3(128.5, 102.3, 1)
+                   
                     ],
                     transform: null
                 }
