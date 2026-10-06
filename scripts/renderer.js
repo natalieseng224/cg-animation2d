@@ -124,6 +124,8 @@ class Renderer {
         // TODO: draw at least 3 polygons that spin about their own centers
         //   - have each polygon spin at a different speed / direction
         
+        //
+        this.drawConvexPolygon()
         
     }
 
