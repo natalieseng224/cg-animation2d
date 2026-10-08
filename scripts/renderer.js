@@ -1,5 +1,6 @@
 import * as CG from './transforms.js';
-import { Matrix } from './matrix.js';
+import { Matrix } from "./matrix.js";
+
 
 class Renderer {
     // canvas:              object ({id: __, width: __, height: __})
@@ -21,18 +22,29 @@ class Renderer {
 
         this.models = {
             slide0: [
-                // example model (diamond) -> should be replaced with actual model
                 {
                     vertices: [
-                        CG.Vector3(400, 150, 1),
-                        CG.Vector3(500, 300, 1),
-                        CG.Vector3(400, 450, 1),
-                        CG.Vector3(300, 300, 1)
+                        CG.Vector3(130, 110, 1),
+                        CG.Vector3(128.5, 117.7, 1),
+                        CG.Vector3(124.1, 124.1, 1),
+                        CG.Vector3(117.7, 128.5, 1),
+                        CG.Vector3(110, 130, 1),
+                        CG.Vector3(102.3, 128.5, 1),
+                        CG.Vector3(95.9, 124.1, 1),
+                        CG.Vector3(91.5, 117.7, 1),
+                        CG.Vector3(90, 110, 1),
+                        CG.Vector3(91.5, 102.3, 1),
+                        CG.Vector3(95.9, 95.9, 1),
+                        CG.Vector3(102.3, 91.5, 1),
+                        CG.Vector3(110, 90, 1),
+                        CG.Vector3(117.7, 91.5, 1),
+                        CG.Vector3(124.1, 95.9, 1),
+                        CG.Vector3(128.5, 102.3, 1)
                     ],
-                    transform: new Matrix(3, 3),
-                    color: [255, 0, 0, 255]
+                    transform: null
                 }
             ],
+            
             slide1: [
                 // Triangle
                 {
@@ -133,10 +145,23 @@ class Renderer {
         // TODO: update any transformations needed for animation
         let t = time / 1000.0;              // Time since start
         let dt = delta_time / 1000.0;       // Time since last frame
-        //let hCenter = this.canvas.width / 2;     // Horizontal Center 
-        //let vCenter = this.canvas.height / 2;    // Veritcal Center
 
         // Slide 0: Bouncing ball
+        if (this.slide_idx == 0) { // translation 
+
+            let current_tx = this.models.slide0.transform[0][2]; // current t_x value
+            //let current_tx = this.models.slide0.transform.values[0][2];
+            let v_x = this.models.slide0.velocity.x; // current v_x value
+            let t_x = current_tx + v_x * delta_time; // calculate new position: p = p + velocity*delta(t)
+
+            let current_ty = this.models.slide0.transform[1][2]; // current t_y value
+            // let current_ty = this.models.slide0.transform.values[1][2];
+            let v_y = this.models.slide0.velocity.y; // current v_y value
+            let t_y = current_ty + v_y * delta_time; // calculate new position: p = p + velocity*delta(t)
+
+            // update transformation matrix 
+            this.models.slide0.transform = CG.mat3x3Translate(this.models.slide0.transform, t_x, t_y);
+        }
 
         // Slide 1: Rotating polygons
         for(let m of this.models.slide1) {
@@ -175,13 +200,44 @@ class Renderer {
 
     //
     drawSlide0() {
-        // TODO: draw bouncing ball (circle that changes direction whenever it hits an edge)
-        
-        
-        // Following lines are example of drawing a single polygon
-        // (this should be removed/edited after you implement the slide)
         let teal = [0, 128, 128, 255];
-        //this.drawConvexPolygon(this.models.slide0[0].vertices, this.models.slide0.color);
+        // make translation matrix a Matrix object (for multiplication)
+        let translation_matrix = new Matrix(3,3); 
+        translation_matrix.values = this.models.slide0.transform; 
+        
+        // make array of matrices that will be drawn 
+        let tempCircle = []; // tempCircle is empty array
+        for (let i = 0; i < 16; i++) { // for each point in the circle
+            // new point is the translaiton matrix * old point 
+            // push new point (as a Matrix object) to tempCircle
+            tempCircle.push(Matrix.multiply([translation_matrix, this.models.slide0.vertices[i]])); 
+        }
+
+        // round all values in matrices 
+        for (let i = 0; i < 16; i++) { // values at each point
+            let unrounded_values = tempCircle[i].values; // store values in an array
+            let rounded_x = Math.trunc(unrounded_values[0]); // round x
+            let rounded_y = Math.trunc(unrounded_values[1]); // round y
+            let rounded_vector = CG.Vector3(rounded_x, rounded_y, 1); // create a new vector with rounded values
+            tempCircle[i] = rounded_vector; // replace old vector with rounded one
+        }
+
+        //console.log(tempCircle);
+
+        this.drawConvexPolygon(tempCircle, teal); // draw polygon
+
+        if (this.models.slide0.transform[0][2] > 670) {// hits right edge
+            this.models.slide0.velocity.x = -30;
+        }
+        if (this.models.slide0.transform[0][2] < 30) {// hits left edge
+            this.models.slide0.velocity.x = 100;
+        }
+        if (this.models.slide0.transform[1][2] > 570) {// hits top edge
+            this.models.slide0.velocity.y = -150;
+        }
+        if (this.models.slide0.transform[0][2] > 670) {// hits bottom edge
+            this.models.slide0.velocity.y = 50;
+        }
     }
 
     //
