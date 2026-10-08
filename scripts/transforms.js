@@ -15,6 +15,7 @@ function mat3x3Translate(mat3x3, tx, ty) {
     mat3x3.values = [[1, 0, tx],
                     [0, 1, ty],
                     [0, 0, 1]];
+    return mat3x3; 
 }
 
 // Set values of existing 3x3 matrix to the scale matrix
