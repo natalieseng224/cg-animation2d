@@ -21,7 +21,7 @@ class Renderer {
         let vCenter = this.canvas.height / 2; 
 
         this.models = {
-            slide0: [
+            slide0: 
                 {
                     vertices: [
                         CG.Vector3(130, 110, 1),
@@ -44,7 +44,7 @@ class Renderer {
                     transform: new Matrix(3, 3),
                     velocity: {x: 100, y: 50}
                 }
-            ],
+            ,
             
             slide1: [
                 // Triangle
@@ -150,18 +150,18 @@ class Renderer {
         // Slide 0: Bouncing ball
         if (this.slide_idx == 0) { // translation 
 
-            let current_tx = this.models.slide0.transform[0][2]; // current t_x value
+            let current_tx = this.models.slide0.transform.values[0][2]; // current t_x value
             //let current_tx = this.models.slide0.transform.values[0][2];
             let v_x = this.models.slide0.velocity.x; // current v_x value
-            let t_x = current_tx + v_x * delta_time; // calculate new position: p = p + velocity*delta(t)
+            let t_x = current_tx + v_x * dt; // calculate new position: p = p + velocity*delta(t)
 
-            let current_ty = this.models.slide0.transform[1][2]; // current t_y value
+            let current_ty = this.models.slide0.transform.values[1][2]; // current t_y value
             // let current_ty = this.models.slide0.transform.values[1][2];
             let v_y = this.models.slide0.velocity.y; // current v_y value
-            let t_y = current_ty + v_y * delta_time; // calculate new position: p = p + velocity*delta(t)
-
+            let t_y = current_ty + v_y * dt; // calculate new position: p = p + velocity*delta(t)
+            
             // update transformation matrix 
-            this.models.slide0.transform = CG.mat3x3Translate(this.models.slide0.transform, t_x, t_y);
+            CG.mat3x3Translate(this.models.slide0.transform, t_x, t_y);
         }
 
         // Slide 1: Rotating polygons
@@ -249,12 +249,12 @@ class Renderer {
         //   - have each polygon spin at a different speed / direction
         
         for (let i = 0; i < this.models.slide1.length; i++){        // Passes through each polygon one by one.
-            let model = this.models.slide1[i];
+            let model1 = this.models.slide1[i];
             let ver = [];                                           // Holds polygon's vertices after being moved into place.
-            for (let j = 0; j < model.vertices.length; j++){        // Processes each polygon's vertex, where they are translated and rotated,
-                ver.push(model.transform.mult(model.vertices[j]));  // then multiplied by the matrix by the vertex to get the 'at this moment'
+            for (let j = 0; j < model1.vertices.length; j++){        // Processes each polygon's vertex, where they are translated and rotated,
+                ver.push(model1.transform.mult(model1.vertices[j]));  // then multiplied by the matrix by the vertex to get the 'at this moment'
             }                                                       // vertex's position.
-            this.drawConvexPolygon(ver, model.color);
+            this.drawConvexPolygon(ver, model1.color);
         }
     }
 
