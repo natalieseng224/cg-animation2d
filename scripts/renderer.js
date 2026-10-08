@@ -41,7 +41,8 @@ class Renderer {
                         CG.Vector3(124.1, 95.9, 1),
                         CG.Vector3(128.5, 102.3, 1)
                     ],
-                    transform: null
+                    transform: new Matrix(3, 3),
+                    velocity: {x: 100, y: 50}
                 }
             ],
             
@@ -55,7 +56,7 @@ class Renderer {
                     ],
                     center: [hCenter, vCenter],
                     rev_per_sec: -1,
-                    transform: new Matrix(3,3),
+                    transform: new Matrix(3, 3),
                     color: [0, 128, 128, 255]
                 },
                 // Square
@@ -68,7 +69,7 @@ class Renderer {
                     ],
                     center: [hCenter * 0.25, vCenter],
                     rev_per_sec: 0.25,
-                    transform: new Matrix(3,3),
+                    transform: new Matrix(3, 3),
                     color: [230, 150, 30, 255]
                 },
                 // Hexagon
@@ -82,7 +83,7 @@ class Renderer {
                     ],
                     center: [hCenter * 1.75, vCenter],
                     rev_per_sec: 1.75,
-                    transform: new Matrix(3,3),
+                    transform: new Matrix(3, 3),
                     color: [100, 70, 180, 255]
                 }
             ],
@@ -164,13 +165,15 @@ class Renderer {
         }
 
         // Slide 1: Rotating polygons
-        for(let m of this.models.slide1) {
-            let angle = 2 * Math.PI * m.rev_per_sec * t;
-            let mt = new Matrix(3, 3);
-            CG.mat3x3Translate(mt, m.center[0], m.center[1]);
-            let mr = new Matrix(3, 3);
-            CG.mat3x3Rotate(mr, angle); 
-            m.transform = Matrix.multiply([mt, mr]);
+        if (this.slide_idx == 1){
+            for(let m of this.models.slide1) {
+                let angle = 2 * Math.PI * m.rev_per_sec * t;
+                let mt = new Matrix(3, 3);
+                CG.mat3x3Translate(mt, m.center[0], m.center[1]);
+                let mr = new Matrix(3, 3);
+                CG.mat3x3Rotate(mr, angle); 
+                m.transform = Matrix.multiply([mt, mr]);
+            }
         }
         // Slide 2: Grow & Shrink
 
