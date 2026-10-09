@@ -21,7 +21,7 @@ class Renderer {
         let vCenter = this.canvas.height / 2; 
 
         this.models = {
-            slide0: 
+            slide0: [
                 {
                     vertices: [
                         CG.Vector3(130, 110, 1),
@@ -44,7 +44,7 @@ class Renderer {
                     transform: new Matrix(3, 3),
                     velocity: {x: 100, y: 50}
                 }
-            ,
+            ],
             
             slide1: [
                 // Triangle
@@ -87,7 +87,40 @@ class Renderer {
                     color: [100, 70, 180, 255]
                 }
             ],
-            slide2: [],
+            slide2: [ 
+                {
+                    vertices: [
+                        CG.Vector3(0, -70, 1),
+                        CG.Vector3(67, -22, 1),
+                        CG.Vector3(41, 57, 1),
+                        CG.Vector3(-41, 57, 1),
+                        CG.Vector3(-67, -22, 1)
+
+                    ],
+                    center: [hCenter * 0.5, vCenter],
+                    rate_x: 0.5,    // rate = how fast in that direction
+                    gs_x: 0.6,      // gs = grow and shrink
+                    rate_y: 0.5,    
+                    gs_y: 0.6,
+                    transform: new Matrix(3, 3),
+                    color: [60, 160, 90, 255]
+                },
+                {
+                    vertices: [
+                        CG.Vector3(-50, -50, 1),
+                        CG.Vector3(50, -50, 1),
+                        CG.Vector3(50, 50, 1),
+                        CG.Vector3(-50, 50, 1)
+                    ],
+                    center: [hCenter * 1.5, vCenter],
+                    rate_x: 0.4,
+                    gs_x: 0.7,
+                    rate_y: 1.1,
+                    gs_y: 0.35,
+                    transform: new Matrix(3, 3),
+                    color: [200, 80, 130, 255]
+                }
+            ],
             slide3: []
         };
     }
@@ -147,36 +180,32 @@ class Renderer {
         let t = time / 1000.0;              // Time since start
         let dt = delta_time / 1000.0;       // Time since last frame
 
-        // Slide 0: Bouncing ball
-        if (this.slide_idx == 0) { // translation 
-
-            let current_tx = this.models.slide0.transform.values[0][2]; // current t_x value
-            //let current_tx = this.models.slide0.transform.values[0][2];
-            let v_x = this.models.slide0.velocity.x; // current v_x value
-            let t_x = current_tx + v_x * dt; // calculate new position: p = p + velocity*delta(t)
-
-            let current_ty = this.models.slide0.transform.values[1][2]; // current t_y value
-            // let current_ty = this.models.slide0.transform.values[1][2];
-            let v_y = this.models.slide0.velocity.y; // current v_y value
-            let t_y = current_ty + v_y * dt; // calculate new position: p = p + velocity*delta(t)
-            
-            // update transformation matrix 
-            CG.mat3x3Translate(this.models.slide0.transform, t_x, t_y);
+        
         }
 
         // Slide 1: Rotating polygons
         if (this.slide_idx == 1){
-            for(let m of this.models.slide1) {
-                let angle = 2 * Math.PI * m.rev_per_sec * t;
-                let mt = new Matrix(3, 3);
-                CG.mat3x3Translate(mt, m.center[0], m.center[1]);
-                let mr = new Matrix(3, 3);
-                CG.mat3x3Rotate(mr, angle); 
-                m.transform = Matrix.multiply([mt, mr]);
+            for(let m1 of this.models.slide1) {
+                let angle = 2 * Math.PI * m1.rev_per_sec * t;
+                let mt1 = new Matrix(3, 3);
+                CG.mat3x3Translate(mt1, m1.center[0], m1.center[1]);
+                let mr1 = new Matrix(3, 3);
+                CG.mat3x3Rotate(mr1, angle); 
+                m1.transform = Matrix.multiply([mt1, mr1]);
             }
         }
         // Slide 2: Grow & Shrink
-
+        if (this.slide_idx == 2){
+            for (let m2 of this.models.slide2) {
+                let scal_x = 1 + m2.gs_x * Math.sin(2 * Math.PI * m2.rate_x * t);
+                let scal_y = 1 + m2.gs_y * Math.sin(2 * Math.PI * m2.rate_y * t);
+                let mt2 = new Matrix(3, 3);
+                CG.mat3x3Translate(mt2, m2.center[0], m2.center[1]);
+                let ms = new Matrix(3, 3);
+                CG.mat3x3Scale(ms, scal_x, scal_y);
+                m2.transform = Matrix.multiply(mt2, ms);
+            }
+        }
         // Slide 3: Fun
 
     }
@@ -204,32 +233,23 @@ class Renderer {
     //
     drawSlide0() {
         let teal = [0, 128, 128, 255];
-        // make translation matrix a Matrix object (for multiplication)
-        let translation_matrix = new Matrix(3,3); 
-        translation_matrix.values = this.models.slide0.transform; 
         
-        // make array of matrices that will be drawn 
-        let tempCircle = []; // tempCircle is empty array
-        for (let i = 0; i < 16; i++) { // for each point in the circle
-            // new point is the translaiton matrix * old point 
-            // push new point (as a Matrix object) to tempCircle
-            tempCircle.push(Matrix.multiply([translation_matrix, this.models.slide0.vertices[i]])); 
         }
 
         // round all values in matrices 
-        for (let i = 0; i < 16; i++) { // values at each point
+        /*for (let i = 0; i < 16; i++) { // values at each point
             let unrounded_values = tempCircle[i].values; // store values in an array
             let rounded_x = Math.trunc(unrounded_values[0]); // round x
             let rounded_y = Math.trunc(unrounded_values[1]); // round y
             let rounded_vector = CG.Vector3(rounded_x, rounded_y, 1); // create a new vector with rounded values
             tempCircle[i] = rounded_vector; // replace old vector with rounded one
-        }
+        }*/
 
         //console.log(tempCircle);
 
-        this.drawConvexPolygon(tempCircle, teal); // draw polygon
+        // this.drawConvexPolygon(tempCircle, teal); // draw polygon
 
-        if (this.models.slide0.transform[0][2] > 670) {// hits right edge
+        /*if (this.models.slide0.transform[0][2] > 670) {// hits right edge
             this.models.slide0.velocity.x = -30;
         }
         if (this.models.slide0.transform[0][2] < 30) {// hits left edge
@@ -240,7 +260,7 @@ class Renderer {
         }
         if (this.models.slide0.transform[0][2] > 670) {// hits bottom edge
             this.models.slide0.velocity.y = 50;
-        }
+        }*/
     }
 
     //
@@ -250,11 +270,11 @@ class Renderer {
         
         for (let i = 0; i < this.models.slide1.length; i++){        // Passes through each polygon one by one.
             let model1 = this.models.slide1[i];
-            let ver = [];                                           // Holds polygon's vertices after being moved into place.
+            let ver1 = [];                                           // Holds polygon's vertices after being moved into place.
             for (let j = 0; j < model1.vertices.length; j++){        // Processes each polygon's vertex, where they are translated and rotated,
-                ver.push(model1.transform.mult(model1.vertices[j]));  // then multiplied by the matrix by the vertex to get the 'at this moment'
+                ver1.push(model1.transform.mult(model1.vertices[j]));  // then multiplied by the matrix by the vertex to get the 'at this moment'
             }                                                       // vertex's position.
-            this.drawConvexPolygon(ver, model1.color);
+            this.drawConvexPolygon(ver1, model1.color);
         }
     }
 
@@ -264,6 +284,15 @@ class Renderer {
         //   - have each polygon grow / shrink different sizes
         //   - try at least 1 polygon that grows / shrinks non-uniformly in the x and y directions
         
+        for (let i = 0; i < this.models.slide1.length; i++){        
+            let model2 = this.models.slide1[i];
+            let ver2 = [];                                           
+            for (let j = 0; j < model2.vertices.length; j++){        
+                ver2.push(model2.transform.mult(model2.vertices[j]));  
+            }                                                       
+            this.drawConvexPolygon(ver2, model2.color);
+        }
+
     }
 
     //
