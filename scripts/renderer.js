@@ -41,7 +41,6 @@ class Renderer {
                         CG.Vector3(124.1, 95.9, 1),
                         CG.Vector3(128.5, 102.3, 1)
                     ],
-                    //transform: CG.mat3x3Identity(new Matrix(3, 3)),
                     transform: new Matrix(3,3),
                     velocity: {x: 100, y: 50}
                 }
@@ -89,10 +88,147 @@ class Renderer {
                 }
             ],
             slide2: [],
-            slide3: []
+            slide3: [
+                // Bouncing ball 1
+                {
+                    vertices: [
+                        CG.Vector3(130, 110, 1),
+                        CG.Vector3(128.5, 117.7, 1),
+                        CG.Vector3(124.1, 124.1, 1),
+                        CG.Vector3(117.7, 128.5, 1),
+                        CG.Vector3(110, 130, 1),
+                        CG.Vector3(102.3, 128.5, 1),
+                        CG.Vector3(95.9, 124.1, 1),
+                        CG.Vector3(91.5, 117.7, 1),
+                        CG.Vector3(90, 110, 1),
+                        CG.Vector3(91.5, 102.3, 1),
+                        CG.Vector3(95.9, 95.9, 1),
+                        CG.Vector3(102.3, 91.5, 1),
+                        CG.Vector3(110, 90, 1),
+                        CG.Vector3(117.7, 91.5, 1),
+                        CG.Vector3(124.1, 95.9, 1),
+                        CG.Vector3(128.5, 102.3, 1)
+                    ],
+                    transform: new Matrix(3,3),
+                    velocity: {x: 100, y: 50}
+                },
+                // Bouncing ball 2
+                { 
+                    vertices: [ 
+                        CG.Vector3(130, 490, 1), 
+                        CG.Vector3(128.5, 497.7, 1), 
+                        CG.Vector3(124.1, 504.1, 1), 
+                        CG.Vector3(117.7, 508.5, 1), 
+                        CG.Vector3(110, 510, 1), 
+                        CG.Vector3(102.3, 508.5, 1), 
+                        CG.Vector3(95.9, 504.1, 1), 
+                        CG.Vector3(91.5, 497.7, 1), 
+                        CG.Vector3(90, 490, 1), 
+                        CG.Vector3(91.5, 482.3, 1), 
+                        CG.Vector3(95.9, 475.9, 1), 
+                        CG.Vector3(102.3, 471.5, 1), 
+                        CG.Vector3(110, 470, 1), 
+                        CG.Vector3(117.7, 471.5, 1), 
+                        CG.Vector3(124.1, 475.9, 1), 
+                        CG.Vector3(128.5, 482.3, 1) 
+                    ], 
+                    transform: new Matrix(3,3), 
+                    velocity: {x: 125, y: -75} 
+                }, 
+                // Bouncing ball 3
+                { 
+                    vertices: [ 
+                        CG.Vector3(710, 490, 1), 
+                        CG.Vector3(708.5, 497.7, 1), 
+                        CG.Vector3(704.1, 504.1, 1), 
+                        CG.Vector3(697.7, 508.5, 1), 
+                        CG.Vector3(690, 510, 1), 
+                        CG.Vector3(682.3, 508.5, 1), 
+                        CG.Vector3(675.9, 504.1, 1), 
+                        CG.Vector3(671.5, 497.7, 1), 
+                        CG.Vector3(670, 490, 1), 
+                        CG.Vector3(671.5, 482.3, 1), 
+                        CG.Vector3(675.9, 475.9, 1), 
+                        CG.Vector3(682.3, 471.5, 1), 
+                        CG.Vector3(690, 470, 1), 
+                        CG.Vector3(697.7, 471.5, 1), 
+                        CG.Vector3(704.1, 475.9, 1), 
+                        CG.Vector3(708.5, 482.3, 1) 
+                    ], 
+                    transform: new Matrix(3,3), 
+                    velocity: {x: -50, y: -200} 
+                }, 
+                // bouncing ball 4 
+                { 
+                    vertices: [ 
+                        CG.Vector3(710, 110, 1), 
+                        CG.Vector3(708.5, 117.7, 1), 
+                        CG.Vector3(704.1, 124.1, 1),
+                        CG.Vector3(697.7, 128.5, 1), 
+                        CG.Vector3(690, 130, 1), 
+                        CG.Vector3(682.3, 128.5, 1), 
+                        CG.Vector3(675.9, 124.1, 1), 
+                        CG.Vector3(671.5, 117.7, 1), 
+                        CG.Vector3(670, 110, 1), 
+                        CG.Vector3(671.5, 102.3, 1), 
+                        CG.Vector3(675.9, 95.9, 1), 
+                        CG.Vector3(682.3, 91.5, 1), 
+                        CG.Vector3(690, 90, 1), 
+                        CG.Vector3(697.7, 91.5, 1), 
+                        CG.Vector3(704.1, 95.9, 1), 
+                        CG.Vector3(708.5, 102.3, 1) 
+                    ], 
+                    transform: new Matrix(3,3), 
+                    velocity: {x: -200, y: 100} 
+                }, 
+                // square 1
+                {
+                    vertices: [
+                        CG.Vector3(-30, -30, 1),
+                        CG.Vector3(30, -30, 1),
+                        CG.Vector3(30, 30, 1),
+                        CG.Vector3(-30, 30, 1)
+                    ],
+                    center: [hCenter * 0.25, 0.5*vCenter],
+                    rev_per_sec: 0.25,
+                    transform: new Matrix(3, 3),
+                    color: [255, 250, 16, 255]
+                },
+                // square 2
+                {
+                    vertices: [
+                        CG.Vector3(-30, -30, 1),
+                        CG.Vector3(30, -30, 1),
+                        CG.Vector3(30, 30, 1),
+                        CG.Vector3(-30, 30, 1)
+                    ],
+                    center: [hCenter * 0.5, 0.5*vCenter],
+                    rev_per_sec: 0.25,
+                    transform: new Matrix(3, 3),
+                    color: [250, 200, 152, 255]
+                },
+                // square 3
+                {
+                    vertices: [
+                        CG.Vector3(-30, -30, 1),
+                        CG.Vector3(30, -30, 1),
+                        CG.Vector3(30, 30, 1),
+                        CG.Vector3(-30, 30, 1)
+                    ],
+                    center: [hCenter * 0.75, 0.5*vCenter],
+                    rev_per_sec: 0.25,
+                    transform: new Matrix(3, 3),
+                    color: [255, 105, 97, 255]
+                }
+            ]
         };
 
         CG.mat3x3Identity(this.models.slide0.transform);
+
+        CG.mat3x3Identity(this.models.slide3[0].transform);
+        CG.mat3x3Identity(this.models.slide3[1].transform);
+        CG.mat3x3Identity(this.models.slide3[2].transform);
+        CG.mat3x3Identity(this.models.slide3[3].transform);
     }
 
     // flag:  bool
@@ -155,8 +291,6 @@ class Renderer {
 
             let circle = this.models.slide0;
 
-            console.log(circle.transform);
-
             let current_tx = circle.transform.values[0][2]; // current t_x 
             let v_x = circle.velocity.x; // current v_x 
             let t_x = current_tx + v_x * dt; // calculate new position: p = p + velocity*delta(t)
@@ -194,8 +328,90 @@ class Renderer {
             }
         }
         // Slide 2: Grow & Shrink
+        else if (this.slide_idx == 2) {
 
-        // Slide 3: Fun
+        }
+
+        else { // Slide 3: Fun!!
+            for (let i=0; i<4; i++){
+                let circle = this.models.slide3[i]
+                let current_tx = circle.transform.values[0][2]; 
+                let v_x = circle.velocity.x; 
+                let t_x = current_tx + v_x * dt; 
+                let current_ty = circle.transform.values[1][2]; 
+                let v_y = circle.velocity.y; 
+                let t_y = current_ty + v_y * dt; 
+                CG.mat3x3Translate(circle.transform, t_x, t_y);
+                if (i == 0) {
+                    if (circle.transform.values[0][2] > 670) {// hits right edge
+                        circle.velocity.x = -1 * circle.velocity.x;
+                    }
+                    if (circle.transform.values[0][2] < -90) {// hits left edge
+                        circle.velocity.x = -1 * circle.velocity.x;
+                    }
+                    if (circle.transform.values[1][2] > 470) {// hits top edge
+                        circle.velocity.y = -1 * circle.velocity.y;
+                    }
+                    if (circle.transform.values[1][2] < -90) {// hits bottom edge
+                        circle.velocity.y = -1 * circle.velocity.y;
+                    }
+                }
+                if (i == 1) {
+                    if (circle.transform.values[0][2] > 670) {// hits right edge
+                        circle.velocity.x = -1 * circle.velocity.x;
+                    }
+                    if (circle.transform.values[0][2] < -90) {// hits left edge
+                        circle.velocity.x = -1 * circle.velocity.x;
+                    }
+                    if (circle.transform.values[1][2] > 90) {// hits top edge
+                        circle.velocity.y = -1 * circle.velocity.y;
+                    }
+                    if (circle.transform.values[1][2] < -470) {// hits bottom edge
+                        circle.velocity.y = -1 * circle.velocity.y;
+                    }
+                }
+                if (i == 2) {
+                    if (circle.transform.values[0][2] > 90) {// hits right edge
+                        circle.velocity.x = -1 * circle.velocity.x;
+                    }
+                    if (circle.transform.values[0][2] < -670) {// hits left edge
+                        circle.velocity.x = -1 * circle.velocity.x;
+                    }
+                    if (circle.transform.values[1][2] > 90) {// hits top edge
+                        circle.velocity.y = -1 * circle.velocity.y;
+                    }
+                    if (circle.transform.values[1][2] < -470) {// hits bottom edge
+                        circle.velocity.y = -1 * circle.velocity.y;
+                    }
+                }
+                if (i == 3) {
+                    if (circle.transform.values[0][2] > 90) {// hits right edge
+                        circle.velocity.x = -1 * circle.velocity.x;
+                    }
+                    if (circle.transform.values[0][2] < -670) {// hits left edge
+                        circle.velocity.x = -1 * circle.velocity.x;
+                    }
+                    if (circle.transform.values[1][2] > 470) {// hits top edge
+                        circle.velocity.y = -1 * circle.velocity.y;
+                    }
+                    if (circle.transform.values[1][2] < -90) {// hits bottom edge
+                        circle.velocity.y = -1 * circle.velocity.y;
+                    }
+                }
+            }
+            for (let i=4; i<7; i++) {
+                let square = this.models.slide3[i];
+                let angle = 2 * Math.PI * square.rev_per_sec * t;
+                let mt = new Matrix(3, 3);
+                CG.mat3x3Translate(mt, square.center[0], square.center[1]);
+                let mr = new Matrix(3, 3);
+                CG.mat3x3Rotate(mr, angle); 
+                square.transform = Matrix.multiply([mt, mr]);
+            }
+
+        }
+
+
 
     }
     
@@ -229,8 +445,6 @@ class Renderer {
         for (let i = 0; i < 16; i++) { // for each point in the circle
             // new point is the translaiton matrix * old point 
             // push new point (as a Matrix object) to tempCircle
-            console.log(model.transform);
-            console.log(model.vertices[i]);
             tempCircle.push(Matrix.multiply([model.transform, model.vertices[i]])); 
 
             // rounded values 
@@ -242,8 +456,6 @@ class Renderer {
         }
 
         this.drawConvexPolygon(tempCircle, teal); // draw polygon
-
-    
     }
 
     //
@@ -272,11 +484,44 @@ class Renderer {
 
     //
     drawSlide3() {
-        // TODO: get creative!
-        //   - animation should involve all three basic transformation types
-        //     (translation, scaling, and rotation)
-        
-        
+        let lavender = [230, 230, 250, 255];
+        let green = [119, 221, 119, 255];
+        let pink = [255, 209, 220, 255];
+        let blue = [174, 198, 255, 255];
+
+        for (let i = 0; i<4; i++) {
+            let model = this.models.slide3[i];
+            let temp_circle = []; 
+                for (let i = 0; i < 16; i++) { 
+                    temp_circle.push(Matrix.multiply([model.transform, model.vertices[i]])); 
+                    let unrounded_values = temp_circle[i].values; 
+                    let rounded_x = Math.trunc(unrounded_values[0]); 
+                    let rounded_y = Math.trunc(unrounded_values[1]); 
+                    let rounded_vector = CG.Vector3(rounded_x, rounded_y, 1); 
+                    temp_circle[i] = rounded_vector; 
+                }
+            if (i == 0) {
+                this.drawConvexPolygon(temp_circle, lavender); 
+            }
+            else if (i == 1) {
+                this.drawConvexPolygon(temp_circle, green);
+            }
+            else if (i == 2) {
+                this.drawConvexPolygon(temp_circle, pink);
+            }
+            else {
+                this.drawConvexPolygon(temp_circle, blue);
+            }
+        }
+
+        for (let i=4; i<7; i++) {
+            let model = this.models.slide3[i];
+            let ver = [];                                           
+            for (let j = 0; j < model.vertices.length; j++){        
+                ver.push(model.transform.mult(model.vertices[j]));  
+            }                                                      
+            this.drawConvexPolygon(ver, model.color);
+        }
     }
     
     // vertex_list:  array of object [Matrix(3, 1), Matrix(3, 1), ..., Matrix(3, 1)]
