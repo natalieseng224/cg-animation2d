@@ -41,7 +41,8 @@ class Renderer {
                         CG.Vector3(124.1, 95.9, 1),
                         CG.Vector3(128.5, 102.3, 1)
                     ],
-                    transform: new Matrix(3, 3),
+                    //transform: CG.mat3x3Identity(new Matrix(3, 3)),
+                    transform: new Matrix(3,3),
                     velocity: {x: 100, y: 50}
                 }
             ],
@@ -123,6 +124,8 @@ class Renderer {
             ],
             slide3: []
         };
+
+        CG.mat3x3Identity(this.models.slide0.transform);
     }
 
     // flag:  bool
@@ -180,22 +183,47 @@ class Renderer {
         let t = time / 1000.0;              // Time since start
         let dt = delta_time / 1000.0;       // Time since last frame
 
-        
+        // Slide 0: Bouncing ball
+        if (this.slide_idx == 0) { // translation 
+            let circle = this.models.slide0;
+            let current_tx = circle.transform.values[0][2]; // current t_x value
+            let v_x = circle.velocity.x; // current v_x value
+            let t_x = current_tx + v_x * dt; // calculate new position: p = p + velocity*delta(t)
+
+            let current_ty = this.models.slide0.transform.values[1][2]; // current t_y value
+            let v_y = this.models.slide0.velocity.y; // current v_y value
+            let t_y = current_ty + v_y * dt; // calculate new position: p = p + velocity*delta(t)
+            
+            // update transformation matrix 
+            CG.mat3x3Translate(this.models.slide0.transform, t_x, t_y);
+
+            if (circle.transform.values[0][2] > 670) {// hits right edge
+                circle.velocity.x = -200;
+            }
+            if (circle.transform.values[0][2] < -90) {// hits left edge
+                circle.velocity.x = 100;
+            }
+            if (circle.transform.values[1][2] > 470) {// hits top edge
+                circle.velocity.y = -150;
+            }
+            if (circle.transform.values[1][2] < -90) {// hits bottom edge
+                circle.velocity.y = 200;
+            }
         }
 
         // Slide 1: Rotating polygons
-        if (this.slide_idx == 1){
-            for(let m1 of this.models.slide1) {
-                let angle = 2 * Math.PI * m1.rev_per_sec * t;
-                let mt1 = new Matrix(3, 3);
-                CG.mat3x3Translate(mt1, m1.center[0], m1.center[1]);
-                let mr1 = new Matrix(3, 3);
-                CG.mat3x3Rotate(mr1, angle); 
-                m1.transform = Matrix.multiply([mt1, mr1]);
+        else if (this.slide_idx == 1){
+            for(let m of this.models.slide1) {
+                let angle = 2 * Math.PI * m.rev_per_sec * t;
+                let mt = new Matrix(3, 3);
+                CG.mat3x3Translate(mt, m.center[0], m.center[1]);
+                let mr = new Matrix(3, 3);
+                CG.mat3x3Rotate(mr, angle); 
+                m.transform = Matrix.multiply([mt, mr]);
             }
         }
         // Slide 2: Grow & Shrink
-        if (this.slide_idx == 2){
+        else if (this.slide_idx == 2){
             for (let m2 of this.models.slide2) {
                 let scal_x = 1 + m2.gs_x * Math.sin(2 * Math.PI * m2.rate_x * t);
                 let scal_y = 1 + m2.gs_y * Math.sin(2 * Math.PI * m2.rate_y * t);
@@ -233,40 +261,33 @@ class Renderer {
     //
     drawSlide0() {
         let teal = [0, 128, 128, 255];
-        
-        }
+        let model = this.models.slide0;
+ 
+        // make array of matrices that will be drawn 
+        let tempCircle = []; // tempCircle is empty array
+        for (let i = 0; i < 16; i++) { // for each point in the circle
+            // new point is the translaiton matrix * old point 
+            // push new point (as a Matrix object) to tempCircle
+            tempCircle.push(Matrix.multiply([model.transform, model.vertices[i]])); 
 
-        // round all values in matrices 
-        /*for (let i = 0; i < 16; i++) { // values at each point
+            // rounded values 
             let unrounded_values = tempCircle[i].values; // store values in an array
             let rounded_x = Math.trunc(unrounded_values[0]); // round x
             let rounded_y = Math.trunc(unrounded_values[1]); // round y
             let rounded_vector = CG.Vector3(rounded_x, rounded_y, 1); // create a new vector with rounded values
             tempCircle[i] = rounded_vector; // replace old vector with rounded one
-        }*/
-
-        //console.log(tempCircle);
-
-        // this.drawConvexPolygon(tempCircle, teal); // draw polygon
-
-        /*if (this.models.slide0.transform[0][2] > 670) {// hits right edge
-            this.models.slide0.velocity.x = -30;
         }
-        if (this.models.slide0.transform[0][2] < 30) {// hits left edge
-            this.models.slide0.velocity.x = 100;
-        }
-        if (this.models.slide0.transform[1][2] > 570) {// hits top edge
-            this.models.slide0.velocity.y = -150;
-        }
-        if (this.models.slide0.transform[0][2] > 670) {// hits bottom edge
-            this.models.slide0.velocity.y = 50;
-        }*/
+
+        this.drawConvexPolygon(tempCircle, teal); // draw polygon
+
+    
     }
 
     //
     drawSlide1() {
         // TODO: draw at least 3 polygons that spin about their own centers
         //   - have each polygon spin at a different speed / direction
+
         
         for (let i = 0; i < this.models.slide1.length; i++){        // Passes through each polygon one by one.
             let model1 = this.models.slide1[i];
