@@ -21,7 +21,7 @@ class Renderer {
         let vCenter = this.canvas.height / 2; 
 
         this.models = {
-            slide0: [
+            slide0: 
                 {
                     vertices: [
                         CG.Vector3(130, 110, 1),
@@ -44,7 +44,7 @@ class Renderer {
                     transform: new Matrix(3,3),
                     velocity: {x: 100, y: 50}
                 }
-            ],
+            ,
             
             slide1: [
                 // Triangle
@@ -370,7 +370,7 @@ class Renderer {
                 CG.mat3x3Translate(mt2, m2.center[0], m2.center[1]);
                 let ms = new Matrix(3, 3);
                 CG.mat3x3Scale(ms, scal_x, scal_y);
-                m2.transform = Matrix.multiply(mt2, ms);
+                m2.transform = Matrix.multiply([mt2, ms]);
             }
         }
         // Slide 3: Fun
@@ -519,8 +519,8 @@ class Renderer {
         //   - have each polygon grow / shrink different sizes
         //   - try at least 1 polygon that grows / shrinks non-uniformly in the x and y directions
         
-        for (let i = 0; i < this.models.slide1.length; i++){        
-            let model2 = this.models.slide1[i];
+        for (let i = 0; i < this.models.slide2.length; i++){        
+            let model2 = this.models.slide2[i];
             let ver2 = [];                                           
             for (let j = 0; j < model2.vertices.length; j++){        
                 ver2.push(model2.transform.mult(model2.vertices[j]));  
