@@ -252,6 +252,22 @@ class Renderer {
                     rev_per_sec: 0.25,
                     transform: new Matrix(3, 3),
                     color: [255, 105, 97, 255]
+                },
+                // grow/shrink square
+                {
+                    vertices: [
+                        CG.Vector3(-100, -100, 1),
+                        CG.Vector3(100, -100, 1),
+                        CG.Vector3(100, 100, 1),
+                        CG.Vector3(-100, 100, 1)
+                    ],
+                    center: [hCenter * 1.5, vCenter * 1.5],
+                    rate_x: 0.75,
+                    gs_x: 0.75,
+                    rate_y: 1.25,
+                    gs_y: 0.25,
+                    transform: new Matrix(3, 3),
+                    color: [255, 163, 140, 255]
                 }
             ]
         };
@@ -322,8 +338,6 @@ class Renderer {
         // Slide 0: Bouncing ball
         if (this.slide_idx == 0) { // translation 
             let circle = this.models.slide0;
-
-            console.log(circle.transform);
 
             let current_tx = circle.transform.values[0][2]; // current t_x 
             let v_x = circle.velocity.x; // current v_x value
@@ -451,6 +465,15 @@ class Renderer {
                 square.transform = Matrix.multiply([mt, mr]);
             }
 
+            let gs_square = this.models.slide3[7];
+            let scal_x = 1 + gs_square.gs_x * Math.sin(2 * Math.PI * gs_square.rate_x * t);
+                let scal_y = 1 + gs_square.gs_y * Math.sin(2 * Math.PI * gs_square.rate_y * t);
+                let mt = new Matrix(3, 3);
+                CG.mat3x3Translate(mt, gs_square.center[0], gs_square.center[1]);
+                let ms = new Matrix(3, 3);
+                CG.mat3x3Scale(ms, scal_x, scal_y);
+                gs_square.transform = Matrix.multiply([mt, ms]);
+
         }
     }
     
@@ -532,11 +555,11 @@ class Renderer {
 
     //
     drawSlide3() {
+        
         let lavender = [230, 230, 250, 255];
         let green = [119, 221, 119, 255];
         let pink = [255, 209, 220, 255];
         let blue = [174, 198, 255, 255];
-
         for (let i = 0; i<4; i++) {
             let model = this.models.slide3[i];
             let temp_circle = []; 
@@ -570,6 +593,13 @@ class Renderer {
             }                                                      
             this.drawConvexPolygon(ver, model.color);
         }
+
+        let model = this.models.slide3[7];
+            let ver = [];                                           
+            for (let j = 0; j < model.vertices.length; j++){        
+                ver.push(model.transform.mult(model.vertices[j]));  
+            }                                                       
+            this.drawConvexPolygon(ver, model.color);
     }
     
     // vertex_list:  array of object [Matrix(3, 1), Matrix(3, 1), ..., Matrix(3, 1)]
