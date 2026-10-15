@@ -67,11 +67,24 @@ class Renderer {
                         CG.Vector3(60, 60, 1),
                         CG.Vector3(-60, 60, 1)
                     ],
-                    center: [hCenter * 0.25, vCenter],
+                    center: [hCenter * 0.25, vCenter * 1.6],
                     rev_per_sec: 0.25,
                     transform: new Matrix(3, 3),
                     color: [230, 150, 30, 255]
                 },
+                {
+                    vertices: [
+                        CG.Vector3(-60, -60, 1),
+                        CG.Vector3(60, -60, 1),
+                        CG.Vector3(60, 60, 1),
+                        CG.Vector3(-60, 60, 1)
+                    ],
+                    center: [hCenter * 1.75, vCenter * 1.6],
+                    rev_per_sec: -0.25,
+                    transform: new Matrix(3, 3),
+                    color: [230, 150, 30, 255]
+                },
+                
                 // Hexagon
                 {
                     vertices: [ CG.Vector3(0, -80, 1),
@@ -81,8 +94,21 @@ class Renderer {
                                 CG.Vector3(-69, 40, 1),
                                 CG.Vector3(-69, -40, 1)
                     ],
-                    center: [hCenter * 1.75, vCenter],
+                    center: [hCenter * 1.75, vCenter * 0.45],
                     rev_per_sec: 1.75,
+                    transform: new Matrix(3, 3),
+                    color: [100, 70, 180, 255]
+                },
+                {
+                    vertices: [ CG.Vector3(0, -80, 1),
+                                CG.Vector3(69, -40, 1),
+                                CG.Vector3(69, 40, 1),
+                                CG.Vector3(0, 80, 1),
+                                CG.Vector3(-69, 40, 1),
+                                CG.Vector3(-69, -40, 1)
+                    ],
+                    center: [hCenter * 0.25, vCenter * 0.45],
+                    rev_per_sec: -1.75,
                     transform: new Matrix(3, 3),
                     color: [100, 70, 180, 255]
                 }
@@ -97,7 +123,7 @@ class Renderer {
                         CG.Vector3(-67, -22, 1)
 
                     ],
-                    center: [hCenter * 0.5, vCenter],
+                    center: [hCenter, vCenter * 0.5],
                     rate_x: 0.5,    // rate = how fast in that direction
                     gs_x: 0.6,      // gs = grow and shrink
                     rate_y: 0.5,    
@@ -112,14 +138,49 @@ class Renderer {
                         CG.Vector3(50, 50, 1),
                         CG.Vector3(-50, 50, 1)
                     ],
-                    center: [hCenter * 1.5, vCenter],
+                    center: [hCenter, vCenter * 1.5],
                     rate_x: 0.4,
                     gs_x: 0.7,
                     rate_y: 1.1,
                     gs_y: 0.35,
                     transform: new Matrix(3, 3),
                     color: [200, 80, 130, 255]
-                }
+                },
+                {
+                    vertices: [
+                        CG.Vector3(0, -70, 1),
+                        CG.Vector3(67, -22, 1),
+                        CG.Vector3(41, 57, 1),
+                        CG.Vector3(-41, 57, 1),
+                        CG.Vector3(-67, -22, 1)
+
+                    ],
+                    center: [hCenter * 0.40, vCenter],
+                    rate_x: 0.3,    // rate = how fast in that direction
+                    gs_x: 0.6,      // gs = grow and shrink
+                    rate_y: 0.3,    
+                    gs_y: 0.6,
+                    transform: new Matrix(3, 3),
+                    color: [0, 0, 255, 255]
+                },
+                {
+                    vertices: [
+                        CG.Vector3(0, -70, 1),
+                        CG.Vector3(67, -22, 1),
+                        CG.Vector3(41, 57, 1),
+                        CG.Vector3(-41, 57, 1),
+                        CG.Vector3(-67, -22, 1)
+
+                    ],
+                    center: [hCenter * 1.60, vCenter],
+                    rate_x: 0.3,    // rate = how fast in that direction
+                    gs_x: 0.6,      // gs = grow and shrink
+                    rate_y: 0.3,    
+                    gs_y: 0.6,
+                    transform: new Matrix(3, 3),
+                    color: [0, 0, 255, 255]
+                },
+
             ],
             slide3: [
                 // Bouncing ball 1
@@ -252,6 +313,22 @@ class Renderer {
                     rev_per_sec: 0.25,
                     transform: new Matrix(3, 3),
                     color: [255, 105, 97, 255]
+                },
+                 // grow/shrink square
+                {
+                    vertices: [
+                        CG.Vector3(-100, -100, 1),
+                        CG.Vector3(100, -100, 1),
+                        CG.Vector3(100, 100, 1),
+                        CG.Vector3(-100, 100, 1)
+                    ],
+                    center: [hCenter * 1.5, vCenter * 1.5],
+                    rate_x: 0.75,
+                    gs_x: 0.75,
+                    rate_y: 1.25,
+                    gs_y: 0.25,
+                    transform: new Matrix(3, 3),
+                    color: [255, 163, 140, 255]
                 }
             ]
         };
@@ -451,6 +528,14 @@ class Renderer {
                 square.transform = Matrix.multiply([mt, mr]);
             }
 
+            let gs_square = this.models.slide3[7];
+            let scal_x = 1 + gs_square.gs_x * Math.sin(2 * Math.PI * gs_square.rate_x * t);
+                let scal_y = 1 + gs_square.gs_y * Math.sin(2 * Math.PI * gs_square.rate_y * t);
+                let mt = new Matrix(3, 3);
+                CG.mat3x3Translate(mt, gs_square.center[0], gs_square.center[1]);
+                let ms = new Matrix(3, 3);
+                CG.mat3x3Scale(ms, scal_x, scal_y);
+                gs_square.transform = Matrix.multiply([mt, ms]);
         }
     }
     
@@ -570,6 +655,13 @@ class Renderer {
             }                                                      
             this.drawConvexPolygon(ver, model.color);
         }
+        
+        let model = this.models.slide3[7];
+            let ver = [];                                           
+            for (let j = 0; j < model.vertices.length; j++){        
+                ver.push(model.transform.mult(model.vertices[j]));  
+            }                                                       
+            this.drawConvexPolygon(ver, model.color);
     }
     
     // vertex_list:  array of object [Matrix(3, 1), Matrix(3, 1), ..., Matrix(3, 1)]
